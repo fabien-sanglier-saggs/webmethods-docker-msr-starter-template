@@ -1,0 +1,15 @@
+version: "3.8"
+
+networks:
+  stack:
+
+services:
+  
+  compile:
+    image: ${REG}webmethods-abe:${TAG}
+    environment:
+      - projectName=wmsamples-mynewapi
+    volumes:
+      - .:/src:rw
+    networks:
+      - stack
