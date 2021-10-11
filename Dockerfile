@@ -10,7 +10,7 @@ LABEL maintainer="fabien.sanglier@softwareaggov.com" \
 # COPY --chown=${SAG_USERID}:${SAG_GROUPID} assets/licenses/msr-licenseKey.xml $SAG_HOME/IntegrationServer/config/licenseKey.xml
 
 # copy the package specific settings
-COPY --chown=${SAG_USERID}:${SAG_GROUPID} assets/IS/configs/application.properties $SAG_HOME/IntegrationServer/
+COPY --chown=${SAG_USERID}:${SAG_GROUPID} application.properties $SAG_HOME/IntegrationServer/
 
 # copy package(s) -- CHANGE "MyNewAPI" to the right package name
 COPY --chown=${SAG_USERID}:${SAG_GROUPID} build/IS/MyNewAPI.zip $PACKAGES_DIR/

@@ -9,12 +9,10 @@ services:
     image: ${REG}webmethods-msr:${TAG}
     ports:
       - 5555:5555
-    environment:
-      - BUILTIN_USER_ADMIN_PASSWORD=manage
     volumes:
       - ${PWD}/workspace/replicate:/opt/softwareag/IntegrationServer/replicate:rw
       # - ${PWD}/assets/licenses/msr-licenseKey.xml:/opt/softwareag/IntegrationServer/config/licenseKey.xml:rw
-      - ${PWD}/assets/IS/configs/application.properties:/opt/softwareag/IntegrationServer/application.properties:rw
+      - ${PWD}/application-localdev.properties:/opt/softwareag/IntegrationServer/application.properties:rw
       - ${PWD}/assets/IS/Packages/MyNewAPI:/opt/softwareag/IntegrationServer/packages/MyNewAPI:rw
     networks:
       - stack
