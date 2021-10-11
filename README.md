@@ -1,0 +1,1 @@
+# webmethods-docker-msr-starter-template
