@@ -1,0 +1,41 @@
+version: "3.8"
+
+networks:
+  sagnet:
+
+volumes:
+  postgres-data:
+  apigw-elasticdata:
+
+services:
+
+  msrproject:
+    image: ${REG}/webmethods-msr-project-name:${TAG_MSR_PROJECT}
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./licenses/msr-licenseKey.xml:/opt/softwareag/IntegrationServer/config/licenseKey.xml:rw
+    networks:
+      - sagnet
+
+  postgres:
+    image: postgres:13.4-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - sagnet
+
+  apigateway:
+    image: ${REG}apigateway:${TAG_APIGATEWAY}
+    ports:
+      - "5556:5555"
+      - "9072:9072"
+    volumes:
+      - apigw-elasticdata:/opt/softwareag/InternalDataStore/data:rw
+      - ./licenses/apigateway-licenseKey.xml:/opt/softwareag/IntegrationServer/instances/default/config/licenseKey.xml:rw
+    hostname: apigateway
+    networks:
+      - sagnet

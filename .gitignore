@@ -1,14 +1,8 @@
 # ---> softwareAG
-licenseKey.xml
-*license*.xml
-*license.key
-build/
-target/
-replicate/
-workspace/
-licenses/
 *.zip
 *.bak
+*license*.xml
+*license.key
 
 # ---> macOS
 .DS_Store

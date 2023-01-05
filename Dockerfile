@@ -1,26 +1,28 @@
+
 ARG BASE_IMAGE
 FROM $BASE_IMAGE as base
 
-LABEL maintainer="fabien.sanglier@softwareaggov.com" \
-      name="webMethods Microservice API" \
-      summary="Sample microservice API built with webMEthods Microservice Runtime"
+LABEL maintainer="maintainer" \
+      name="name" \
+      summary="summary"
 
-# Optional: ADD license key (good option for a closed secure environment)
-# But for general distribution though let's not...and have the users map their own license key
-# COPY --chown=${SAG_USERID}:${SAG_GROUPID} assets/licenses/msr-licenseKey.xml $SAG_HOME/IntegrationServer/config/licenseKey.xml
+ENV ADMINISTRATOR_PASSWORD="default"
+
+# Optional: ADD license key into the container
+# Another more flexible approach is to NOT bake the license file in, 
+# and instead you should have the license mapped at deployment time (ie. volumes, config maps, etc...)
+# COPY --chown=${SAG_USERID}:${SAG_GROUPID} licenses/msr-licenseKey.xml $SAG_HOME/IntegrationServer/config/licenseKey.xml
+
+# copy possible libs into the right folder
+COPY --chown=${SAG_USERID}:${SAG_GROUPID} libs/ $SAG_HOME/IntegrationServer/lib/jars/custom/
 
 # copy the package specific settings
-COPY --chown=${SAG_USERID}:${SAG_GROUPID} application.properties $SAG_HOME/IntegrationServer/
+COPY --chown=${SAG_USERID}:${SAG_GROUPID} assets/IS/configs/application.properties $SAG_HOME/IntegrationServer/
 
-# copy package(s) -- CHANGE "MyNewAPI" to the right package name
-COPY --chown=${SAG_USERID}:${SAG_GROUPID} build/IS/MyNewAPI.zip $PACKAGES_DIR/
-USER root
+# copy package(s)
+COPY --chown=${SAG_USERID}:${SAG_GROUPID} assets/IS/packages/MyNewAPI $SAG_HOME/IntegrationServer/packages/MyNewAPI
+
+# run Jcode to build the java code
 RUN true \
-    && yum -y install unzip \
-    && unzip $PACKAGES_DIR/MyNewAPI.zip -d $PACKAGES_DIR/MyNewAPI/ \
-    && rm -f $PACKAGES_DIR/MyNewAPI.zip \
-    && chown -R ${SAG_USERID}:${SAG_GROUPID} $PACKAGES_DIR/MyNewAPI/ \
-    && yum remove -y unzip \
-    && yum clean all \
+    && $SAG_HOME/IntegrationServer/bin/jcode.sh make MyNewAPI \
     && true
-USER ${SAG_USER}
